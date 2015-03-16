@@ -26,8 +26,8 @@ class couchdb(
   anchor { '::couchdb::start': } ->
   class { '::couchdb::package': } ->
   class { '::couchdb::install': } ->
-  class { '::couchdb::service': } ->
   class { '::couchdb::ssl': } ->
+  class { '::couchdb::service': } ->
   anchor { '::couchdb::end': }
 
 }
