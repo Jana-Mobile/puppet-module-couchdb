@@ -19,10 +19,7 @@ class couchdb::ssl {
                 -newkey rsa:2048 -out ${couchdb::cert_path}/couchdb_cert.pem -keyout ${couchdb::cert_path}/couchdb_key.pem",
     unless  => "/usr/bin/test -f ${couchdb::cert_path}/couchdb_cert.pem &&
                 /usr/bin/test -f ${couchdb::cert_path}/couchdb_key.pem",
-    require => [
-      File[$couchdb::cert_path],
-      Exec['make-install']
-    ],
+    require => File[$couchdb::cert_path],
     notify  => Service['couchdb'],
   }
 }

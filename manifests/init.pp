@@ -19,11 +19,15 @@ class couchdb(
   $uuids = 'utc_random',
   $cert_path = '/usr/local/etc/certs',
   $ulimit = '65536',
-  $delayed_commits = false
+  $delayed_commits = false,
+  $use_package = false
 ) {
 
-  include couchdb::package,
-          couchdb::install,
-          couchdb::service,
-          couchdb::ssl
+  anchor { '::couchdb::start': } ->
+  class { '::couchdb::package': } ->
+  class { '::couchdb::install': } ->
+  class { '::couchdb::ssl': } ->
+  class { '::couchdb::service': } ->
+  anchor { '::couchdb::end': }
+
 }
