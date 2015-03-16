@@ -22,8 +22,11 @@ class couchdb(
   $delayed_commits = false
 ) {
 
-  include couchdb::package,
-          couchdb::install,
-          couchdb::service,
-          couchdb::ssl
+  anchor { '::couchdb::start': } ->
+  class { '::couchdb::package': } ->
+  class { '::couchdb::install': } ->
+  class { '::couchdb::service': } ->
+  class { '::couchdb::ssl': } ->
+  anchor { '::couchdb::end': }
+
 }
