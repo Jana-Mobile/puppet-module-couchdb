@@ -1,4 +1,4 @@
-class couchdb::packages::dependencies {
+class couchdb::package::dependencies {
 
   ensure_resource( 'package', 'build-essential', { ensure => installed })
   ensure_resource( 'package', 'curl', { ensure => installed })

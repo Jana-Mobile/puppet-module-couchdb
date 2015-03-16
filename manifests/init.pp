@@ -19,7 +19,8 @@ class couchdb(
   $uuids = 'utc_random',
   $cert_path = '/usr/local/etc/certs',
   $ulimit = '65536',
-  $delayed_commits = false
+  $delayed_commits = false,
+  $use_package = false
 ) {
 
   anchor { '::couchdb::start': } ->

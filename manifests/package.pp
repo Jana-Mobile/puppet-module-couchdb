@@ -1,5 +1,11 @@
 class couchdb::package {
 
-  class { '::couchdb::package::build': }
+  if $::couchdb::use_package == true {
+    package { 'couchdb':
+      ensure => installed
+    }
+  } else {
+    class { '::couchdb::package::build': }
+  }
 
 }
