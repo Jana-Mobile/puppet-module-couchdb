@@ -8,10 +8,6 @@ class couchdb::install {
     unless => '/usr/bin/test -f /usr/local/bin/couchdb',
   }
 
-  package { $couchdb::package::dependencies:
-    ensure => 'installed',
-  }
-
   user { 'couchdb':
     ensure      => present,
     home        => '/usr/local/var/lib/couchdb',
@@ -20,44 +16,11 @@ class couchdb::install {
     shell       => '/bin/bash'
   }
 
-  exec { 'download':
-    cwd     => $couchdb::cwd,
-    command => "/usr/bin/wget -q ${couchdb::download} -O ${couchdb::filename}",
-    timeout => '120',
-  }
-
-  exec { 'extract':
-    cwd     => $couchdb::cwd,
-    command => "/bin/tar -xzvf ${couchdb::filename}",
-    timeout => '120',
-    require => Exec['download'],
-  }
-
-  exec { 'configure':
-    cwd         => "${couchdb::cwd}/${couchdb::foldername}",
-    environment => 'HOME=/root',
-    command     => "${couchdb::cwd}/${couchdb::foldername}/configure ${couchdb::package::buildoptions}",
-    timeout     => '600',
-    require     => [
-      Exec['extract'],
-      Package[$couchdb::package::dependencies]
-    ],
-  }
-
-  exec { 'make-install':
-    cwd         => "${couchdb::cwd}/${couchdb::foldername}",
-    environment => 'HOME=/root',
-    command     => '/usr/bin/make && /usr/bin/make install',
-    timeout     => '600',
-    require     => Exec['configure'],
-  }
-
   File {
     owner   => 'couchdb',
     group   => 'couchdb',
     mode    => '0700',
     require => [
-      Exec['make-install'],
       User['couchdb']
     ],
   }
